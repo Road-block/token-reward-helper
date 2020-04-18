@@ -203,12 +203,8 @@ function handleId(msg, editBox, pattern)
 end
 
 -- get a list of rewards for a given itemLink
-function getRewardList(itemLink)
-  return getRewardList(itemLink, false)
-end
-
--- get a list of rewards for a given itemLink
 function getRewardList(itemLink, fullList)
+  fullList = fullList or false
   local itemId = getItemId(getItemString(itemLink))
   local fullRewards = getRewards(itemId)
   if (fullRewards == nil) then
@@ -275,14 +271,27 @@ end
 ---- UI
 --------------------------------------------------------------
 
--- updates the tooltips if hovering over an item
-function OnTooltipSetItem(self)
-  local itemName, itemLink = self:GetItem()
-  local tooltips = { RewardTooltip1, RewardTooltip2, RewardTooltip3, RewardTooltip4, RewardTooltip5 }
+function OnRefTooltipSetItem(self)
+  -- tooltip order from left to right: 1 - 2 - 3 - 4 - 5
+  local refTooltips = { RewardRefTooltip1, RewardRefTooltip2, RewardRefTooltip3, RewardRefTooltip4, RewardRefTooltip5 }
+  local tooltipOwner = { self, RewardRefTooltip1, RewardRefTooltip2, RewardRefTooltip3, RewardRefTooltip4}
+  local tooltipAttachmentInner = { "TOPLEFT" , "TOPLEFT" , "TOPLEFT" , "TOPLEFT" , "TOPLEFT" }
+  local tooltipAttachmentOuter = { "TOPRIGHT", "TOPRIGHT", "TOPRIGHT", "TOPRIGHT", "TOPRIGHT" }
+  return attachRewardTooltips(self, refTooltips, tooltipOwner, tooltipAttachmentInner, tooltipAttachmentOuter)
+end
+
+function OnNormalTooltipSetItem(self)
   -- tooltip order from left to right: 5 - 3 - 1 - 2 - 4
+  local tooltips = { RewardTooltip1, RewardTooltip2, RewardTooltip3, RewardTooltip4, RewardTooltip5 }
   local tooltipOwner = { self, RewardTooltip1, RewardTooltip1, RewardTooltip2, RewardTooltip3}
   local tooltipAttachmentInner = { "TOPLEFT"   , "TOPLEFT" , "TOPRIGHT", "TOPLEFT" , "TOPRIGHT" }
   local tooltipAttachmentOuter = { "BOTTOMLEFT", "TOPRIGHT", "TOPLEFT" , "TOPRIGHT", "TOPLEFT" }
+  return attachRewardTooltips(self, tooltips, tooltipOwner, tooltipAttachmentInner, tooltipAttachmentOuter)
+end
+
+-- updates the tooltips if hovering over an item
+function attachRewardTooltips(self, tooltips, tooltipOwner, tooltipAttachmentInner, tooltipAttachmentOuter)
+  local itemName, itemLink = self:GetItem()
   if (debug) then
     print(format("itemlink: %s",itemLink))
   end
@@ -331,16 +340,19 @@ function OnTooltipSetItem(self)
   end
 end
 
--- hide all rewards
-function HideTooltips(self, elapsed) 
-  HideTooltips(self)
-end
-
--- hide all rewards
+-- hide all reward tooltips 
 function HideTooltips(self) 
   local tooltips = { RewardTooltip1, RewardTooltip2, RewardTooltip3, RewardTooltip4, RewardTooltip5 }
   for i = 1, #tooltips do
     tooltips[i]:Hide()
+  end
+end
+
+-- hide all reward refTooltips 
+function HideRefTooltips(self)
+  local refTooltips = { RewardRefTooltip1, RewardRefTooltip2, RewardRefTooltip3, RewardRefTooltip4, RewardRefTooltip5 }
+  for i = 1, #refTooltips do
+    refTooltips[i]:Hide()
   end
 end
 
@@ -351,6 +363,12 @@ function InitializeTooltips(self)
     tooltips[i]:SetOwner(GameTooltip, "ANCHOR_NONE")
     tooltips[i]:SetHyperlink(getItemLink(18422))
     tooltips[i]:SetScript("OnEnter", function(self, motion) OnEnter(self, motion) end)
+  end
+  local refTooltips = { RewardRefTooltip1, RewardRefTooltip2, RewardRefTooltip3, RewardRefTooltip4, RewardRefTooltip5 }
+  for i = 1, #refTooltips do
+    refTooltips[i]:SetOwner(ItemRefTooltip, "ANCHOR_NONE")
+    refTooltips[i]:SetHyperlink(getItemLink(18422))
+    refTooltips[i]:SetScript("OnEnter", function(self, motion) OnEnter(self, motion) end)
   end
   for itemId, value in pairs(TOKEN_DATA) do
     getItemLink(itemId)
@@ -365,13 +383,20 @@ end
 ---- handles
 --------------------------------------------------------------
 
+-- CLI
 SLASH_TOKENREWARDHELPER1 = '/tokenrewardhelper'
 SLASH_TOKENREWARDHELPER2 = '/trh'
 SlashCmdList["TOKENREWARDHELPER"] = handler
 
+-- GameTooltip
 GameTooltip:HookScript("OnLoad", InitializeTooltips)
-GameTooltip:HookScript("OnTooltipSetItem", OnTooltipSetItem)
+GameTooltip:HookScript("OnTooltipSetItem", OnNormalTooltipSetItem)
 GameTooltip:HookScript("OnTooltipSetSpell", HideTooltips)
 GameTooltip:HookScript("OnTooltipSetUnit", HideTooltips)
 GameTooltip:HookScript("OnTooltipCleared", HideTooltips)
---ItemRefTooltip:HookScript("OnTooltipSetItem", OnTooltipSetItem)
+
+-- ItemRefTooltip
+ItemRefTooltip:HookScript("OnTooltipSetItem", OnRefTooltipSetItem)
+ItemRefTooltip:HookScript("OnTooltipSetSpell", HideRefTooltips)
+ItemRefTooltip:HookScript("OnTooltipSetUnit", HideRefTooltips)
+ItemRefTooltip:HookScript("OnTooltipCleared", HideRefTooltips)
