@@ -150,8 +150,10 @@ local debug = false
 
 -- print help on how to use the command line
 function printHelp()
-  print("wrong usage")
-  print(format("class warrior: %d", CLASSES.WARRIOR))
+  print("Token Reward Helper usage:")
+  print("/trh debug : toggle debug modus")
+  print("/trh id <itemLink> : prints the id for a given item")
+  print("/trh rw <itemLink> : prints all rewards for a given item")
 end
 
 -- returns an itemString from a given itemLink
@@ -202,6 +204,11 @@ end
 
 -- get a list of rewards for a given itemLink
 function getRewardList(itemLink)
+  return getRewardList(itemLink, false)
+end
+
+-- get a list of rewards for a given itemLink
+function getRewardList(itemLink, fullList)
   local itemId = getItemId(getItemString(itemLink))
   local fullRewards = getRewards(itemId)
   if (fullRewards == nil) then
@@ -210,29 +217,23 @@ function getRewardList(itemLink)
     end
     return
   end
-  local filteredRewards = filterRewards(fullRewards, "player")
-  
-  local displayRewards = {}
-  if (next(filteredRewards) ~= nil) then
-    displayRewards = filteredRewards
-  else
-    --displayRewards = fullRewards
+  if (fullList) then
+    return fullRewards
   end
 
-  return displayRewards
+  local filteredRewards = filterRewards(fullRewards, "player")
+  return filteredRewards
 end
 
 -- method to handle the "rw" command line
 function handleReward(msg, editBox, rwPattern)
   local itemLink = string.match(msg, rwPattern)
 
-  local rewardList = getRewardList(itemLink)
+  local rewardList = getRewardList(itemLink, true)
   
-  if (debug) then
-    print(format("reward lookup for %s:", itemLink))
-    for k, v in pairs(rewardList) do
-      print(format("%s", getItemLink(k)))
-    end
+  print(format("reward lookup for %s:", itemLink))
+  for k, v in pairs(rewardList) do
+    print(format("%s", getItemLink(k)))
   end
 end
 
