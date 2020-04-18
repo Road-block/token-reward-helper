@@ -275,7 +275,7 @@ function OnTooltipSetItem(self)
       else
         tooltips[i]:SetPoint("TOPRIGHT", owner, "TOPLEFT")
       end
-      tooltips[i]:SetHyperlink(getItemLink(k))
+      tooltips[i]:SetItemByID(k)
       if (self:IsVisible()) then
         tooltips[i]:Show()
       else
