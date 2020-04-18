@@ -131,7 +131,7 @@ end
 
 -- filters a list of rewards based on character class
 function filterRewards(table, filterElement)
-  if (IsShiftKeyDown()) then
+  if (IsModifierKeyDown()) then
     return table
   end
   local _, _, classIndex = UnitClass(filterElement)
