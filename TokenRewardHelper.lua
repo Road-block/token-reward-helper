@@ -4,20 +4,21 @@
 --------------------------------------------------------------
 local TOKEN_DATA = {}
 
--- Classes:
---   0 = None
---   1 = Warrior
---   2 = Paladin
---   3 = Hunter
---   4 = Rogue
---   5 = Priest
---   6 = Death Knight
---   7 = Shaman
---   8 = Mage
---   9 = Warlock
---  10 = Monk
---  11 = Druid
---  12 = Demon Hunter
+CLASS = {
+  NONE         = 0,
+  WARRIOR      = 1,
+  PALADIN      = 2,
+  HUNTER       = 3,
+  ROGUE        = 4,
+  PRIEST       = 5,
+  DEATH_KNIGHT = 6,
+  SHAMAN       = 7,
+  MAGE         = 8,
+  WARLOCK      = 9,
+  MONK         = 10,
+  DRUID        = 11,
+  DEMON_HUNTER = 12
+}
 
 ---- Datafunctions
 function addToken(tokenId)
@@ -31,66 +32,113 @@ end
 --- Ony Head
 -- Horde
 addToken(18422)
-addReward(18422, 18406, 0)
-addReward(18422, 18403, 0)
-addReward(18422, 18404, 0)
+addReward(18422, 18406, CLASS.NONE)
+addReward(18422, 18403, CLASS.NONE)
+addReward(18422, 18404, CLASS.NONE)
 -- Alliance
 addToken(18423)
-addReward(18423, 18406, 0)
-addReward(18423, 18403, 0)
-addReward(18423, 18404, 0)
+addReward(18423, 18406, CLASS.NONE)
+addReward(18423, 18403, CLASS.NONE)
+addReward(18423, 18404, CLASS.NONE)
 
 --- ZG Items
 -- Heart of Hakkar
 addToken(19802)
-addReward(19802, 19948, 0)
-addReward(19802, 19950, 0)
-addReward(19802, 19949, 0)
+addReward(19802, 19948, CLASS.NONE)
+addReward(19802, 19950, CLASS.NONE)
+addReward(19802, 19949, CLASS.NONE)
 -- Primal Hakkari Shawl
 addToken(19721)
-addReward(19721, 19828, 2)
-addReward(19721, 19845, 8)
-addReward(19721, 19832, 3)
+addReward(19721, 19826, CLASS.PALADIN)
+addReward(19721, 19845, CLASS.MAGE)
+addReward(19721, 19832, CLASS.HUNTER)
 -- Primal Hakkari Aegis
 addToken(19724)
-addReward(19724, 19841, 5)
-addReward(19724, 19834, 4)
-addReward(19724, 19831, 3)
+addReward(19724, 19841, CLASS.PRIEST)
+addReward(19724, 19834, CLASS.ROGUE)
+addReward(19724, 19831, CLASS.HUNTER)
 -- Primal Hakkari Kossack
 addToken(19723)
-addReward(19723, 20033, 9)
-addReward(19723, 20034, 2)
-addReward(19723, 19822, 1)
+addReward(19723, 20033, CLASS.WARLOCK)
+addReward(19723, 20034, CLASS.MAGE)
+addReward(19723, 19822, CLASS.WARRIOR)
 -- Primal Hakkari Tabard
 addToken(19722)
-addReward(19722, 19828, 7)
-addReward(19722, 19825, 2)
-addReward(19722, 19838, 11)
+addReward(19722, 19828, CLASS.SHAMAN)
+addReward(19722, 19825, CLASS.PALADIN)
+addReward(19722, 19838, CLASS.DRUID)
 -- Primal Hakkari Armsplint
 addToken(19717)
-addReward(19717, 19830, 7)
-addReward(19717, 19836, 4)
-addReward(19717, 19824, 1)
+addReward(19717, 19830, CLASS.SHAMAN)
+addReward(19717, 19836, CLASS.ROGUE)
+addReward(19717, 19824, CLASS.WARRIOR)
 -- Primal Hakkari Bindings
 addToken(19716)
-addReward(19716, 19827, 2)
-addReward(19716, 19846, 8)
-addReward(19716, 19833, 3)
+addReward(19716, 19827, CLASS.PALADIN)
+addReward(19716, 19846, CLASS.MAGE)
+addReward(19716, 19833, CLASS.HUNTER)
 -- Primal Hakkari Stanchion
 addToken(19718)
-addReward(19718, 19843, 5)
-addReward(19718, 19848, 9)
-addReward(19718, 19840, 11)
+addReward(19718, 19843, CLASS.PRIEST)
+addReward(19718, 19848, CLASS.WARLOCK)
+addReward(19718, 19840, CLASS.DRUID)
 -- Primal Hakkari Girdle
 addToken(19719)
-addReward(19719, 19829, 7)
-addReward(19719, 19835, 4)
-addReward(19719, 19823, 1)
+addReward(19719, 19829, CLASS.SHAMAN)
+addReward(19719, 19835, CLASS.ROGUE)
+addReward(19719, 19823, CLASS.WARRIOR)
 -- Primal Hakkari Sash
 addToken(19720)
-addReward(19720, 19842, 5)
-addReward(19720, 19849, 9)
-addReward(19720, 19839, 11)
+addReward(19720, 19842, CLASS.PRIEST)
+addReward(19720, 19849, CLASS.WARLOCK)
+addReward(19720, 19839, CLASS.DRUID)
+
+--- AQ20 Items
+-- Head of Ossirian the Unscarred
+addToken(21220)
+addReward(21220, 21504, CLASS.NONE)
+addReward(21220, 21507, CLASS.NONE)
+addReward(21220, 21505, CLASS.NONE)
+addReward(21220, 21506, CLASS.NONE)
+-- Qiraji Martial Drape
+addToken(20885)
+addReward(20885, 21406, CLASS.ROGUE)
+addReward(20885, 21394, CLASS.WARRIOR)
+addReward(20885, 21415, CLASS.MAGE)
+addReward(20885, 21412, CLASS.PRIEST)
+-- Qiraji Regal Drape
+addToken(20889)
+addReward(20889, 21397, CLASS.PALADIN)
+addReward(20889, 21400, CLASS.SHAMAN)
+addReward(20889, 21403, CLASS.HUNTER)
+addReward(20889, 21409, CLASS.DRUID)
+addReward(20889, 21418, CLASS.WARLOCK)
+-- Qiraji Ceremonial Ring
+addToken(20888)
+addReward(20888, 21405, CLASS.ROGUE)
+addReward(20888, 21411, CLASS.PRIEST)
+addReward(20888, 21417, CLASS.WARLOCK)
+addReward(20888, 21402, CLASS.HUNTER)
+-- Qiraji Magisterial Ring
+addToken(20884)
+addReward(20884, 21408, CLASS.DRUID)
+addReward(20884, 21414, CLASS.MAGE)
+addReward(20884, 21396, CLASS.PALADIN)
+addReward(20884, 21399, CLASS.SHAMAN)
+addReward(20884, 21393, CLASS.WARRIOR)
+-- Qiraji Ornate Hilt
+addToken(20890)
+addReward(20890, 21413, CLASS.MAGE)
+addReward(20890, 21410, CLASS.PRIEST)
+addReward(20890, 21416, CLASS.WARLOCK)
+addReward(20890, 21407, CLASS.DRUID)
+-- Qiraji Spiked Hilt
+addToken(20886)
+addReward(20886, 21395, CLASS.PALADIN)
+addReward(20886, 21404, CLASS.ROGUE)
+addReward(20886, 21398, CLASS.SHAMAN)
+addReward(20886, 21401, CLASS.HUNTER)
+addReward(20886, 21392, CLASS.WARRIOR)
 
 ---- options
 
@@ -103,6 +151,7 @@ local debug = false
 -- print help on how to use the command line
 function printHelp()
   print("wrong usage")
+  print(format("class warrior: %d", CLASSES.WARRIOR))
 end
 
 -- returns an itemString from a given itemLink
@@ -228,6 +277,11 @@ end
 -- updates the tooltips if hovering over an item
 function OnTooltipSetItem(self)
   local itemName, itemLink = self:GetItem()
+  local tooltips = { RewardTooltip1, RewardTooltip2, RewardTooltip3, RewardTooltip4, RewardTooltip5 }
+  -- tooltip order from left to right: 5 - 3 - 1 - 2 - 4
+  local tooltipOwner = { self, RewardTooltip1, RewardTooltip1, RewardTooltip2, RewardTooltip3}
+  local tooltipAttachmentInner = { "TOPLEFT"   , "TOPLEFT" , "TOPRIGHT", "TOPLEFT" , "TOPRIGHT" }
+  local tooltipAttachmentOuter = { "BOTTOMLEFT", "TOPRIGHT", "TOPLEFT" , "TOPRIGHT", "TOPLEFT" }
   if (debug) then
     print(format("itemlink: %s",itemLink))
   end
@@ -236,12 +290,9 @@ function OnTooltipSetItem(self)
     if (debug) then
       print(format("itemid of item in tooltip: %d", itemId))
     end
-    --print(RewardTooltip1:getOwner())
-    --RewardTooltip1:setOwner(self, "ANCHOR_RIGHT")
-    local tooltips = { RewardTooltip1, RewardTooltip2, RewardTooltip3 }
     local rewardList = getRewardList(itemLink)
     if (rewardList == nil or next(rewardList) == nil) then
-      for i = 1, 3 do
+      for i = 1, #tooltips do
         if (debug) then
           print(format("hiding frame %d",i))
         end
@@ -256,25 +307,11 @@ function OnTooltipSetItem(self)
         print(tostring(k))
       end
     end
-
+  
     local i = 1
     for k, v in pairs(rewardList) do
-      local owner = self
-      if (i == 2) then
-        owner = RewardTooltip1
-      elseif (i == 3) then
-        owner = RewardTooltip1
-      else
-        owner = self
-      end
-      tooltips[i]:SetOwner(owner, "ANCHOR_NONE")
-      if (i == 1) then
-        tooltips[i]:SetPoint("TOPLEFT", owner, "BOTTOMLEFT")
-      elseif (i == 2) then
-        tooltips[i]:SetPoint("TOPLEFT", owner, "TOPRIGHT")
-      else
-        tooltips[i]:SetPoint("TOPRIGHT", owner, "TOPLEFT")
-      end
+      tooltips[i]:SetOwner(tooltipOwner[i], "ANCHOR_NONE")
+      tooltips[i]:SetPoint(tooltipAttachmentInner[i], tooltipOwner[i], tooltipAttachmentOuter[i])
       tooltips[i]:SetItemByID(k)
       if (self:IsVisible()) then
         tooltips[i]:Show()
@@ -283,11 +320,11 @@ function OnTooltipSetItem(self)
       end
       i = i + 1
     end
-    for i = i, 3 do
+    for i = i, #tooltips do
       tooltips[i]:Hide()
     end
   else
-    for i = 1, 3 do
+    for i = 1, #tooltips do
       tooltips[i]:Hide()
     end
   end
@@ -300,16 +337,16 @@ end
 
 -- hide all rewards
 function HideTooltips(self) 
-  local tooltips = { RewardTooltip1, RewardTooltip2, RewardTooltip3 }
-  for i = 1, 3 do
+  local tooltips = { RewardTooltip1, RewardTooltip2, RewardTooltip3, RewardTooltip4, RewardTooltip5 }
+  for i = 1, #tooltips do
     tooltips[i]:Hide()
   end
 end
 
 -- preload the tooltips
 function InitializeTooltips(self)
-  local tooltips = { RewardTooltip1, RewardTooltip2, RewardTooltip3 }
-  for i = 1, 3 do
+  local tooltips = { RewardTooltip1, RewardTooltip2, RewardTooltip3, RewardTooltip4, RewardTooltip5 }
+  for i = 1, #tooltips do
     tooltips[i]:SetOwner(GameTooltip, "ANCHOR_NONE")
     tooltips[i]:SetHyperlink(getItemLink(18422))
     tooltips[i]:SetScript("OnEnter", function(self, motion) OnEnter(self, motion) end)
