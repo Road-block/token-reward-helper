@@ -1,0 +1,6 @@
+## Interface: 80300
+## Title: Token Reward Helper
+## Notes: Helps with Tokens awarding multiple items.
+## Author: Tyrnar
+TokenRewardHelper.lua
+TokenRewardHelper.xml
