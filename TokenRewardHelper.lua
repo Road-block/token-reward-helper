@@ -41,6 +41,18 @@ addReward(18423, 18406, CLASS.NONE)
 addReward(18423, 18403, CLASS.NONE)
 addReward(18423, 18404, CLASS.NONE)
 
+--- Nef Head
+-- Horde
+addToken(19002)
+addReward(19002, 19383, CLASS.NONE)
+addReward(19002, 19366, CLASS.NONE)
+addReward(19002, 19384, CLASS.NONE)
+-- Alliance
+addToken(19003)
+addReward(19003, 19383, CLASS.NONE)
+addReward(19003, 19366, CLASS.NONE)
+addReward(19003, 19384, CLASS.NONE)
+
 --- ZG Items
 -- Heart of Hakkar
 addToken(19802)
@@ -340,7 +352,7 @@ function attachRewardTooltips(self, tooltips, tooltipOwner, tooltipAttachmentInn
   end
 end
 
--- hide all reward tooltips 
+-- hide all reward tooltips
 function HideTooltips(self) 
   local tooltips = { RewardTooltip1, RewardTooltip2, RewardTooltip3, RewardTooltip4, RewardTooltip5 }
   for i = 1, #tooltips do
@@ -348,7 +360,7 @@ function HideTooltips(self)
   end
 end
 
--- hide all reward refTooltips 
+-- hide all reward refTooltips
 function HideRefTooltips(self)
   local refTooltips = { RewardRefTooltip1, RewardRefTooltip2, RewardRefTooltip3, RewardRefTooltip4, RewardRefTooltip5 }
   for i = 1, #refTooltips do
