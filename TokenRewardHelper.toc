@@ -3,5 +3,6 @@
 ## Notes: Helps with Tokens awarding multiple items.
 ## Author: Tyrnar
 ## Version: @project-version@
+## X-Curse-Project-ID: 376730
 TokenRewardHelper.lua
 TokenRewardHelper.xml
