@@ -2,6 +2,6 @@
 ## Title: Token Reward Helper
 ## Notes: Helps with Tokens awarding multiple items.
 ## Author: Tyrnar
-## Version: 1.2.1
+## Version: @project-version@
 TokenRewardHelper.lua
 TokenRewardHelper.xml
