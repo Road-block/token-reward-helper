@@ -10,11 +10,10 @@ install: luarocks install --local luacheck
 before_script:
  - /home/travis/.luarocks/bin/luacheck . -q
 
-script: curl -s https://raw.githubusercontent.com/BigWigsMods/packager/master/release.sh | bash
+script: curl -s https://raw.githubusercontent.com/BigWigsMods/packager/master/release.sh | bash -- -g 1.13.4
 
 branches:
   only:
-    - master
     - /^v?\d+\.\d+(\.\d+)?(-\S*)?$/ # v1.0.0 or 1.0.0 etc
 
 notifications:
