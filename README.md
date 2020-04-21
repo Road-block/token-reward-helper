@@ -6,12 +6,7 @@ In addition to the normal tooltip of the token another tooltip will be shown for
 
 If you click on linked reward tokens in chat, a filtered list of rewards usable by you will be shown as well.
 
-![Primal Hakkari Token](https://i.imgur.com/BXsVA8C.png "Primal Hakkari Token")
-
-![Primal Hakkari Token holding SHIFT](https://i.imgur.com/h32uFAe.jpg "Primal Hakkari Token holding SHIFT")
-
-![Heart of Hakkar](https://i.imgur.com/7XN7uTT.png "Heart of Hakkar")
-_I will post better screenshots once i don't have to link the item using Atlas Loot_
+![Primal Hakkari Token](https://i.imgur.com/et3AVDL.png "Primal Hakkari Token")
 
 Currently implemented tokens:
 
