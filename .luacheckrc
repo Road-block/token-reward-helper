@@ -12,6 +12,7 @@ ignore = {
 	"1/[A-Z][A-Z][A-Z0-9_]+", -- three letter+ constants
 	"RewardTooltip[0-9]*",
 	"RewardRefTooltip[0-9]*",
+  "TokenRewardHelperSettings",
 }
 globals = {
 	-- wow std api
