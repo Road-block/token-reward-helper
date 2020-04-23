@@ -152,6 +152,11 @@ TOKEN_DATA:addReward(20886, 21398, CLASS.SHAMAN)
 TOKEN_DATA:addReward(20886, 21401, CLASS.HUNTER)
 TOKEN_DATA:addReward(20886, 21392, CLASS.WARRIOR)
 
+local ALIGNMENT = {
+  BOTTOM = 1,
+  TOP    = 2
+}
+
 ---- options
 
 local debug = false
@@ -166,6 +171,7 @@ local function printHelp()
   print("/trh debug : toggle debug modus")
   print("/trh id <itemLink> : prints the id for a given item")
   print("/trh rw <itemLink> : prints all rewards for a given item")
+  print("/trh align <TOP|BOTTOM> : set the alignment of the reward tooltip above or below the token tooltip")
 end
 
 -- returns an itemString from a given itemLink
@@ -245,6 +251,22 @@ local function handleReward(msg, rwPattern)
   end
 end
 
+-- method to handle the "align" command line
+local function handleAlign(msg, alignPattern)
+  local alignment = string.match(msg, alignPattern)
+
+  if (string.lower(alignment) == "top") then
+    TokenRewardHelperSettings["alignment"] = ALIGNMENT.TOP
+  elseif (string.lower(alignment) == "bottom") then
+    TokenRewardHelperSettings["alignment"] = ALIGNMENT.BOTTOM
+  else
+    print("Alignment not recognized!")
+    printHelp()
+  end
+
+  print(format("current tooltip alignment: %d", TokenRewardHelperSettings["alignment"]))
+end
+
 --------------------------------------------------------------
 ---- CLI
 --------------------------------------------------------------
@@ -253,6 +275,7 @@ end
 local function handler(msg)
   local idPattern = "^id%s+(.*)%s*"
   local rwPattern = "^rw%s+(.*)%s*"
+  local alignPattern = "^align%s+(.*)%s*"
   if (msg == "debug") then    
     debug = not debug
     if (debug) then 
@@ -264,6 +287,8 @@ local function handler(msg)
     handleId(msg, idPattern)
   elseif (string.match(msg, rwPattern)) then
     handleReward(msg, rwPattern)
+  elseif (string.match(msg, alignPattern)) then
+    handleAlign(msg, alignPattern)
   else
     printHelp()
   end
@@ -339,8 +364,14 @@ local function OnNormalTooltipSetItem(self)
   -- tooltip order from left to right: 5 - 3 - 1 - 2 - 4
   local tooltips = { RewardTooltip1, RewardTooltip2, RewardTooltip3, RewardTooltip4, RewardTooltip5 }
   local tooltipOwner = { self, RewardTooltip1, RewardTooltip1, RewardTooltip2, RewardTooltip3}
-  local tooltipAttachmentInner = { "TOPLEFT"   , "TOPLEFT" , "TOPRIGHT", "TOPLEFT" , "TOPRIGHT" }
-  local tooltipAttachmentOuter = { "BOTTOMLEFT", "TOPRIGHT", "TOPLEFT" , "TOPRIGHT", "TOPLEFT" }
+  local tooltipAttachmentInner, tooltipAttachmentOuter
+  if (TokenRewardHelperSettings["alignment"] == ALIGNMENT.BOTTOM) then
+    tooltipAttachmentInner = { "TOPLEFT"   , "TOPLEFT" , "TOPRIGHT", "TOPLEFT" , "TOPRIGHT" }
+    tooltipAttachmentOuter = { "BOTTOMLEFT", "TOPRIGHT", "TOPLEFT" , "TOPRIGHT", "TOPLEFT" }
+  else
+    tooltipAttachmentInner = { "BOTTOMLEFT", "TOPLEFT" , "TOPRIGHT", "TOPLEFT" , "TOPRIGHT" }
+    tooltipAttachmentOuter = { "TOPLEFT"   , "TOPRIGHT", "TOPLEFT" , "TOPRIGHT", "TOPLEFT" }
+  end
   return attachRewardTooltips(self, tooltips, tooltipOwner, tooltipAttachmentInner, tooltipAttachmentOuter)
 end
 
@@ -362,18 +393,40 @@ end
 
 -- preload the tooltips
 local function InitializeTooltips()
+  for itemId, _ in pairs(TOKEN_DATA) do
+    getItemLink(itemId)
+  end
   local tooltips = { RewardTooltip1, RewardTooltip2, RewardTooltip3, RewardTooltip4, RewardTooltip5 }
   for i = 1, #tooltips do
     tooltips[i]:SetOwner(GameTooltip, "ANCHOR_NONE")
     tooltips[i]:SetHyperlink(getItemLink(18422))
+    tooltips[i]:SetClampedToScreen(false)
   end
   local refTooltips = { RewardRefTooltip1, RewardRefTooltip2, RewardRefTooltip3, RewardRefTooltip4, RewardRefTooltip5 }
   for i = 1, #refTooltips do
     refTooltips[i]:SetOwner(ItemRefTooltip, "ANCHOR_NONE")
     refTooltips[i]:SetHyperlink(getItemLink(18422))
+    refTooltips[i]:SetClampedToScreen(false)
   end
-  for itemId, _ in pairs(TOKEN_DATA) do
-    getItemLink(itemId)
+end
+
+local addonName = "TokenRewardHelper"
+local trhSettings = CreateFrame("FRAME", addonName)
+
+-- initial loading of tooltips and global variables
+function trhSettings:ADDON_LOADED(eventName)
+  if (eventName == addonName) then
+    InitializeTooltips()
+    if (TokenRewardHelperSettings == nil) then
+      TokenRewardHelperSettings = {}
+    end
+    if (debug) then
+      print(format("saved variable: alignment = %s", tostring(TokenRewardHelperSettings["alignment"])))
+      print(TokenRewardHelperSettings["alignment"] == nil)
+    end
+    if (TokenRewardHelperSettings["alignment"] == nil) then
+      TokenRewardHelperSettings["alignment"] = ALIGNMENT.TOP
+    end
   end
 end
 
@@ -386,8 +439,18 @@ SLASH_TOKENREWARDHELPER1 = '/tokenrewardhelper'
 SLASH_TOKENREWARDHELPER2 = '/trh'
 SlashCmdList["TOKENREWARDHELPER"] = handler
 
+-- Initializing
+trhSettings:RegisterEvent("ADDON_LOADED")
+trhSettings:SetScript(
+  "OnEvent",
+  function(self, event, ...)
+    if (trhSettings[event]) then
+      trhSettings[event](self, ...)
+    end
+  end
+)
+
 -- GameTooltip
-GameTooltip:HookScript("OnLoad", InitializeTooltips)
 GameTooltip:HookScript("OnTooltipSetItem", OnNormalTooltipSetItem)
 GameTooltip:HookScript("OnTooltipSetSpell", HideTooltips)
 GameTooltip:HookScript("OnTooltipSetUnit", HideTooltips)

@@ -4,5 +4,6 @@
 ## Author: Tyrnar
 ## Version: @project-version@
 ## X-Curse-Project-ID: 376730
+## SavedVariables: TokenRewardHelperSettings
 TokenRewardHelper.lua
 TokenRewardHelper.xml
