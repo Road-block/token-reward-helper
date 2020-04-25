@@ -365,6 +365,9 @@ local function OnNormalTooltipSetItem(self)
   local tooltips = { RewardTooltip1, RewardTooltip2, RewardTooltip3, RewardTooltip4, RewardTooltip5 }
   local tooltipOwner = { self, RewardTooltip1, RewardTooltip1, RewardTooltip2, RewardTooltip3}
   local tooltipAttachmentInner, tooltipAttachmentOuter
+  if (TokenRewardHelperSettings == nil) then
+    TokenRewardHelperSettings = {}
+  end
   if (TokenRewardHelperSettings["alignment"] == ALIGNMENT.BOTTOM) then
     tooltipAttachmentInner = { "TOPLEFT"   , "TOPLEFT" , "TOPRIGHT", "TOPLEFT" , "TOPRIGHT" }
     tooltipAttachmentOuter = { "BOTTOMLEFT", "TOPRIGHT", "TOPLEFT" , "TOPRIGHT", "TOPLEFT" }
