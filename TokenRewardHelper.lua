@@ -402,13 +402,15 @@ local function InitializeTooltips()
   local tooltips = { RewardTooltip1, RewardTooltip2, RewardTooltip3, RewardTooltip4, RewardTooltip5 }
   for i = 1, #tooltips do
     tooltips[i]:SetOwner(GameTooltip, "ANCHOR_NONE")
-    tooltips[i]:SetHyperlink(getItemLink(18422))
+    -- calling SetHyperlink here seems to cause lua errors
+    -- tooltips[i]:SetHyperlink(getItemLink(18422))
     tooltips[i]:SetClampedToScreen(false)
   end
   local refTooltips = { RewardRefTooltip1, RewardRefTooltip2, RewardRefTooltip3, RewardRefTooltip4, RewardRefTooltip5 }
   for i = 1, #refTooltips do
     refTooltips[i]:SetOwner(ItemRefTooltip, "ANCHOR_NONE")
-    refTooltips[i]:SetHyperlink(getItemLink(18422))
+    -- calling SetHyperlink here seems to cause lua errors
+    -- refTooltips[i]:SetHyperlink(getItemLink(18422))
     refTooltips[i]:SetClampedToScreen(false)
   end
 end
