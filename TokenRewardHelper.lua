@@ -154,12 +154,28 @@ TOKEN_DATA:addReward(20886, 21392, CLASS.WARRIOR)
 
 local ALIGNMENT = {
   BOTTOM = 1,
-  TOP    = 2
+  TOP    = 2,
+  LEFT   = 3,
+  RIGHT  = 4,
 }
 
----- options
+local function getAlignmentText(index)
+  for k, v in pairs(ALIGNMENT) do
+    if (v == index) then
+      return k
+    end
+  end
+  return "Missing Alignment in getAlignmentText(index)"
+end
+
+---- options and variables
 
 local debug = false
+
+local addonName = "TokenRewardHelper"
+local trhSettings = CreateFrame("FRAME", addonName)
+local panel = CreateFrame("Frame", addonName .. "Panel")
+local alignmentDropDown = CreateFrame("FRAME", "alignDropDown", panel, "UIDropDownMenuTemplate")
 
 --------------------------------------------------------------
 ---- helper functions
@@ -171,7 +187,7 @@ local function printHelp()
   print("/trh debug : toggle debug modus")
   print("/trh id <itemLink> : prints the id for a given item")
   print("/trh rw <itemLink> : prints all rewards for a given item")
-  print("/trh align <TOP|BOTTOM> : set the alignment of the reward tooltip above or below the token tooltip")
+  print("/trh align <TOP|BOTTOM|LEFT|RIGHT> : set the alignment of the reward tooltip to the token tooltip")
 end
 
 -- returns an itemString from a given itemLink
@@ -259,12 +275,18 @@ local function handleAlign(msg, alignPattern)
     TokenRewardHelperSettings["alignment"] = ALIGNMENT.TOP
   elseif (string.lower(alignment) == "bottom") then
     TokenRewardHelperSettings["alignment"] = ALIGNMENT.BOTTOM
+  elseif (string.lower(alignment) == "left") then
+    TokenRewardHelperSettings["alignment"] = ALIGNMENT.LEFT
+  elseif (string.lower(alignment) == "right") then
+    TokenRewardHelperSettings["alignment"] = ALIGNMENT.RIGHT
   else
-    print("Alignment not recognized!")
-    printHelp()
+    InterfaceOptionsFrame_OpenToCategory(panel)
+    InterfaceOptionsFrame_OpenToCategory(panel) -- one call will only open the normal interface options. blizzard bug?
   end
 
-  print(format("current tooltip alignment: %d", TokenRewardHelperSettings["alignment"]))
+  if(debug) then
+    print(format("current tooltip alignment: %d", TokenRewardHelperSettings["alignment"]))
+  end
 end
 
 --------------------------------------------------------------
@@ -275,7 +297,7 @@ end
 local function handler(msg)
   local idPattern = "^id%s+(.*)%s*"
   local rwPattern = "^rw%s+(.*)%s*"
-  local alignPattern = "^align%s+(.*)%s*"
+  local alignPattern = "^align%s?(.*)%s*"
   if (msg == "debug") then    
     debug = not debug
     if (debug) then 
@@ -361,17 +383,31 @@ end
 
 -- handler for mouse over tooltips
 local function OnNormalTooltipSetItem(self)
-  -- tooltip order from left to right: 5 - 3 - 1 - 2 - 4
   local tooltips = { RewardTooltip1, RewardTooltip2, RewardTooltip3, RewardTooltip4, RewardTooltip5 }
-  local tooltipOwner = { self, RewardTooltip1, RewardTooltip1, RewardTooltip2, RewardTooltip3}
-  local tooltipAttachmentInner, tooltipAttachmentOuter
+  local tooltipOwner, tooltipAttachmentInner, tooltipAttachmentOuter
   if (TokenRewardHelperSettings == nil) then
     TokenRewardHelperSettings = {}
   end
   if (TokenRewardHelperSettings["alignment"] == ALIGNMENT.BOTTOM) then
+  -- tooltip order from left to right: 5 - 3 - 1 - 2 - 4
+    tooltipOwner = { self, RewardTooltip1, RewardTooltip1, RewardTooltip2, RewardTooltip3}
     tooltipAttachmentInner = { "TOPLEFT"   , "TOPLEFT" , "TOPRIGHT", "TOPLEFT" , "TOPRIGHT" }
     tooltipAttachmentOuter = { "BOTTOMLEFT", "TOPRIGHT", "TOPLEFT" , "TOPRIGHT", "TOPLEFT" }
+  elseif (TokenRewardHelperSettings["alignment"] == ALIGNMENT.LEFT) then
+    -- TODO
+  -- tooltip order from left to right: 5 - 4 - 3 - 2 - 1
+    tooltipOwner = { self, RewardTooltip1, RewardTooltip2, RewardTooltip3, RewardTooltip4}
+    tooltipAttachmentInner = { "TOPRIGHT" , "TOPRIGHT" , "TOPRIGHT", "TOPRIGHT" , "TOPRIGHT" }
+    tooltipAttachmentOuter = { "TOPLEFT", "TOPLEFT", "TOPLEFT" , "TOPLEFT", "TOPLEFT" }
+  elseif (TokenRewardHelperSettings["alignment"] == ALIGNMENT.RIGHT) then
+    -- TODO
+  -- tooltip order from left to right: 1 - 2 - 3 - 4 - 5
+    tooltipOwner = { self, RewardTooltip1, RewardTooltip2, RewardTooltip3, RewardTooltip4}
+    tooltipAttachmentInner = { "TOPLEFT"   , "TOPLEFT" , "TOPLEFT", "TOPLEFT" , "TOPLEFT" }
+    tooltipAttachmentOuter = { "TOPRIGHT", "TOPRIGHT", "TOPRIGHT" , "TOPRIGHT", "TOPRIGHT" }
   else
+  -- tooltip order from left to right: 5 - 3 - 1 - 2 - 4
+    tooltipOwner = { self, RewardTooltip1, RewardTooltip1, RewardTooltip2, RewardTooltip3}
     tooltipAttachmentInner = { "BOTTOMLEFT", "TOPLEFT" , "TOPRIGHT", "TOPLEFT" , "TOPRIGHT" }
     tooltipAttachmentOuter = { "TOPLEFT"   , "TOPRIGHT", "TOPLEFT" , "TOPRIGHT", "TOPLEFT" }
   end
@@ -392,6 +428,51 @@ local function HideRefTooltips()
   for i = 1, #refTooltips do
     refTooltips[i]:Hide()
   end
+end
+
+-- function for clicking on the alignment dropdown in the options panel
+local function alignmentDropDown_OnClick(_, arg1)
+  TokenRewardHelperSettings["alignment"] = arg1
+  UIDropDownMenu_SetText(alignmentDropDown, getAlignmentText(arg1))
+end
+
+-- initialization of the alignment dropdown panel
+local function initAlignmentDropDown(dropDown, level, menuList)
+  local info = UIDropDownMenu_CreateInfo()
+  info.func = alignmentDropDown_OnClick
+  for k, v in pairs(ALIGNMENT) do
+    info.text = k
+    info.arg1 = v
+    info.checked = v == TokenRewardHelperSettings["alignment"]
+    UIDropDownMenu_AddButton(info)
+  end
+end
+
+-- initialization of the addon panel
+local function InitializePanel()
+  panel.name = "Token Reward Helper"
+
+  InterfaceOptions_AddCategory(panel)
+
+  local title = panel:CreateFontString(addonName .. "Title", "OVERLAY", "GameFontNormalLarge")
+  title:SetPoint("TOP", 0, -12)
+  title:SetText(panel.name)
+
+  local alignOption = panel:CreateFontString(addonName .. "AlignOption", "OVERLAY", "GameFontNormalSmall")
+  alignOption:SetPoint("TOPLEFT", 10, -35)
+  alignOption:SetText("Tooltip Alignment:")
+
+  alignmentDropDown:SetPoint("TOPLEFT", 0, -50)
+  UIDropDownMenu_SetText(alignmentDropDown, getAlignmentText(TokenRewardHelperSettings["alignment"]))
+  UIDropDownMenu_Initialize(alignmentDropDown, initAlignmentDropDown, 1)
+
+  local info1 = panel:CreateFontString(addonName .. "info1", "OVERLAY", "GameFontNormalSmall")
+  info1:SetPoint("TOPLEFT", 20, -85)
+  info1:SetText("This option will be saved immediatly without using the Okay or Cancel Button below.")
+
+  local helpText = panel:CreateFontString(addonName .. "Help", "OVERLAY", "GameFontNormalSmall")
+  helpText:SetPoint("TOPLEFT", 10, -150)
+  helpText:SetText("For more information, type /trh")
 end
 
 -- preload the tooltips
@@ -415,12 +496,10 @@ local function InitializeTooltips()
   end
 end
 
-local addonName = "TokenRewardHelper"
-local trhSettings = CreateFrame("FRAME", addonName)
-
 -- initial loading of tooltips and global variables
 function trhSettings:ADDON_LOADED(eventName)
   if (eventName == addonName) then
+    InitializePanel()
     InitializeTooltips()
     if (TokenRewardHelperSettings == nil) then
       TokenRewardHelperSettings = {}
@@ -430,7 +509,7 @@ function trhSettings:ADDON_LOADED(eventName)
       print(TokenRewardHelperSettings["alignment"] == nil)
     end
     if (TokenRewardHelperSettings["alignment"] == nil) then
-      TokenRewardHelperSettings["alignment"] = ALIGNMENT.TOP
+      TokenRewardHelperSettings["alignment"] = ALIGNMENT.BOTTOM
     end
   end
 end

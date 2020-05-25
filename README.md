@@ -8,6 +8,8 @@ If you click on linked reward tokens in chat, a filtered list of rewards usable 
 
 ![Primal Hakkari Token](https://i.imgur.com/et3AVDL.png "Primal Hakkari Token")
 
+To change the alignment of the Reward Tooltip in relation to the Token Tooltip, type `/trh align`.
+
 Currently implemented tokens:
 
 * Head of Onyxia
