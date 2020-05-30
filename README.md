@@ -18,6 +18,7 @@ Currently implemented tokens:
 * ZG: Primal Hakkari Tokens
 * AQ20: Head of Ossirian the Unscarred
 * AQ20: Qiraji Tokens
+* AQ40: all 11 Tokens
 
-Tokens from AQ40 and Naxx will be added soon.
+Tokens from Naxx will be added soon.
 Maybe an optional unfiltered list of rewards will be added to chat links as well, if i get an idea on how to activate that option while still using the normal clicking.
