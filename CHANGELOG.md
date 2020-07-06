@@ -1,3 +1,8 @@
+#### v1.6.1:
+
+* Interface version in toc file fixed.
+
+#### v1.6.0:
 
 * LEFT and RIGHT added as options for the tooltip alignment.
 * New UI Element added under ESC -> Interface Options -> Token Reward Helper to ease the alignment setting.

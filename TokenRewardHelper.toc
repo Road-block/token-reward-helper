@@ -1,4 +1,4 @@
-## Interface: 80300
+## Interface: 11304
 ## Title: Token Reward Helper
 ## Notes: Helps with Tokens awarding multiple items.
 ## Author: Tyrnar
