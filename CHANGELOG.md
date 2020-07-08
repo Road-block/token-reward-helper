@@ -1,3 +1,7 @@
+#### v1.6.2:
+
+* Interface version for patch 1.13.5 fixed.
+
 #### v1.6.1:
 
 * Interface version in toc file fixed.
