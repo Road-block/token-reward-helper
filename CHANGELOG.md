@@ -1,3 +1,10 @@
+#### v1.7.0:
+
+* Naxxramas (T3 tokens & The Phylactery of Kel'Thuzad) added.
+* Atiesh added.
+* Thunderfury added.
+* Sulfuras added.
+
 #### v1.6.2:
 
 * Interface version for patch 1.13.5 fixed.

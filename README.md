@@ -10,15 +10,17 @@ If you click on linked reward tokens in chat, a filtered list of rewards usable 
 
 To change the alignment of the Reward Tooltip in relation to the Token Tooltip, type `/trh align`.
 
-Currently implemented tokens:
+Currently implemented tokens and items:
 
 * Head of Onyxia
+* Sulfuras
 * Head of Nefarian
+* Thunderfury
 * ZG: Heart of Hakkar
 * ZG: Primal Hakkari Tokens
 * AQ20: Head of Ossirian the Unscarred
 * AQ20: Qiraji Tokens
 * AQ40: all 11 Tokens
-
-Tokens from Naxx will be added soon.
-Maybe an optional unfiltered list of rewards will be added to chat links as well, if i get an idea on how to activate that option while still using the normal clicking.
+* Naxx: The Phylactery of Kel'Thuzad
+* Naxx: all T3 Tokens
+* Atiesh
