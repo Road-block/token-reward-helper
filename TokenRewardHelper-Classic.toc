@@ -1,4 +1,4 @@
-## Interface: 20501
+## Interface: 11307
 ## Title: Token Reward Helper
 ## Notes: Helps with Tokens awarding multiple items.
 ## Author: Tyrnar
